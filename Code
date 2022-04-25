@@ -1,0 +1,39 @@
+## DOWNLOAD GBIF DATA
+library(rgbif)
+options(gbif_user="YOUR USER NAME HERE")
+options(gbif_pwd="YOUR PASSWORD HERE")
+options(gbif_email="YOUR EMAIL HERE")
+
+# Download occurrence data 
+occ_download(pred_in("taxonKey", 3170247), pred("country", "UA"), format = "SIMPLE_CSV")
+asc_syr <- occ_download_get("0236418-210914110416597", overwrite = TRUE) # insert download key in ""
+asc_syr <- occ_download_import(asc_syr)
+
+# Select necessary column ("species", "decimalLatitude", "decimalLongitude") from dataframe downloaded from GBIF
+library(dplyr)
+asc_syr_new <- asc_syr %>% select(species, decimalLatitude, decimalLongitude)
+
+# Delate NA's in dataframe
+asc_syr_final <- na.omit(asc_syr_new)
+
+# Remove duplicate value in dataframe
+asc_syr_fin <- unique(asc_syr_final)
+
+# Write .csv file (optional)
+write.csv(asc_syr_fin, "Asclepias syr.csv")
+
+## MAPPING OCCURENCES
+
+library(ggplot2)
+library(maps)
+library(ggthemes)
+library(mapdata)
+library(sf)
+library(rgdal)
+
+ukr_adm = readOGR(dsn = ".", layer = "UKR_adm1")
+
+ua_adm = fortify(ukr_adm)
+
+# Map for single species
+Asclepias_map <- ggplot(asc_syr_fin, aes(x = decimalLongitude, y = decimalLatitude)) + borders(database = "world", region = "Ukraine") + geom_point(alpha = 0.2, colour = "black") + labs(x = "Longitude", y = "Latitude") + ggtitle("Asclepias syriaca") + theme(plot.title = element_text(hjust = 0.5)) + geom_polygon(data = ua_adm, fill=NA, colour = "black", aes(x = long, y = lat, group = group))
