@@ -31,9 +31,15 @@ library(mapdata)
 library(sf)
 library(rgdal)
 
+Asc_syr <- read.csv("Asclepias syr.csv")
+
 ukr_adm = readOGR(dsn = ".", layer = "UKR_adm1")
 
 ua_adm = fortify(ukr_adm)
 
 # Map for single species
-Asclepias_map <- ggplot(asc_syr_fin, aes(x = decimalLongitude, y = decimalLatitude)) + borders(database = "world", region = "Ukraine") + geom_point(alpha = 0.2, colour = "black") + labs(x = "Longitude", y = "Latitude") + ggtitle("Asclepias syriaca") + theme(plot.title = element_text(hjust = 0.5)) + geom_polygon(data = ua_adm, fill=NA, colour = "black", aes(x = long, y = lat, group = group))
+png("Asclepias syriaca.png", width = 500, height = 350)
+
+ggplot(Asc_syr, aes(x = decimalLongitude, y = decimalLatitude)) + borders(database = "world", region = "Ukraine") + geom_point(alpha = 0.2, colour = "black") + labs(x = "Longitude", y = "Latitude") + ggtitle("Asclepias syriaca") + theme(plot.title = element_text(hjust = 0.5)) + geom_polygon(data = ua_adm, fill=NA, colour = "black", aes(x = long, y = lat, group = group))
+
+dev.off()
