@@ -1,5 +1,10 @@
-## DOWNLOAD GBIF DATA
+# INSTALL NECESSARY PACKAGES
+install.packages("rgbif")
+install.packages("dplyr")
+
+# DOWNLOAD GBIF DATA
 library(rgbif)
+
 options(gbif_user="YOUR USER NAME HERE")
 options(gbif_pwd="YOUR PASSWORD HERE")
 options(gbif_email="YOUR EMAIL HERE")
@@ -23,6 +28,14 @@ asc_syr_fin <- unique(asc_syr_final)
 write.csv(asc_syr_fin, "Asclepias syr.csv")
 
 ## MAPPING OCCURENCES
+
+install.packages("ggplot2")
+install.packages("maps")
+install.packages("ggthemes")
+install.packages("mapdata")
+install.packages("sf")
+install.packages("rgdal", dependencies = TRUE)
+
 
 library(ggplot2)
 library(maps)
